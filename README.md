@@ -120,11 +120,6 @@ public class CulturesController : ControllerBase
 
 This example returns the list of culture names with `GetCultures` and the list of readable descriptions in English and native with the `GetCultureDescriptions` endpoint.
 
-The REST API of this example can be started with the Visual Studio solution `ObjectLocalization.WebApi.sln`.
-<p align="center">
-    <img src="docs/LocalizationSwagger.png" alt="Localization REST API" width="600" />
-</p>
-
 ## Data Localization
 The localization is based on the convention of a C# class property. The localization is stored as a string/value dictionary in a property named `<PropertyName>Localizations`. The sample product localizes the `Name` property with `NameLocalizations` and the `Price` property with `PriceLocalizations`.
 <p align="center">
@@ -241,6 +236,11 @@ public class ProductsController : ControllerBase
 ```
 
 To convert the product to the DTO, the object is first mapped with [AutoMapper](https://github.com/AutoMapper/AutoMapper) `mapper.Map<ProductDto>` and then `MapLocalizations()` is used to apply the localization to the DTO.
+
+The REST API of this example can be started with the Visual Studio solution `ObjectLocalization.WebApi.sln`.
+<p align="center">
+    <img src="docs/LocalizationSwagger.png" alt="Localization REST API" width="600" />
+</p>
 
 > To keep the example simple, the products are stored in local JSON files.
 
