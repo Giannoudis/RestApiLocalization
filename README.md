@@ -218,10 +218,12 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("dto", Name = "GetProductsDto")]
-    public IEnumerable<ProductDto> GetProductsDto([FromQuery] string? culture = null)
+    public IEnumerable<ProductDto> GetProductsDto(
+        [FromQuery] string? culture = null)
     {
         // map products to dto objects
-        var config = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDto>());
+        var config = new MapperConfiguration(
+            cfg => cfg.CreateMap<Product, ProductDto>());
         var mapper = new Mapper(config);
 
         var products = new ProductService().GetProducts();
@@ -288,6 +290,7 @@ Most ORM tools provide the ability to serialize dictionaries in a field.
 #### Entity Framework Code First Localization
 Use the [NotMapped](https://learn.microsoft.com/en-us/ef/core/modeling/entity-properties) attribute with an additional string field that contains the serialized JSON.
 ```csharp
+using System.Text.Json;
 public class Product
 {
     public string Name { get; set; }
@@ -295,8 +298,8 @@ public class Product
     public Dictionary<string, string> NameLocalizations  { get; set; }
     public string NameLocalizationsJson
     {
-        get => System.Text.Json.JsonSerializer.Serialize<Dictionary<string, string>>(NameLocalizations);
-        set => NameLocalizations = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>(value);
+        get => JsonSerializer.Serialize<Dictionary<string, string>>(NameLocalizations);
+        set => NameLocalizations = JsonSerializer.Deserialize<Dictionary<string, string>(value);
     }
 
     public decimal Price { get; set; }
@@ -304,8 +307,8 @@ public class Product
     public Dictionary<string, decimal> PriceLocalizations  { get; set; }
     public decimal PriceLocalizationsJson
     {
-        get => System.Text.Json.JsonSerializer.Serialize<Dictionary<string, decimal>>(PriceLocalizations);
-        set => PriceLocalizations = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, decimal>>(value);
+        get => JsonSerializer.Serialize<Dictionary<string, decimal>>(PriceLocalizations);
+        set => PriceLocalizations = JsonSerializer.Deserialize<Dictionary<string, decimal>>(value);
     }
 }
 ```
@@ -313,12 +316,14 @@ public class Product
 #### Dapper Localization
 With Dapper, you can convert the data with a custom type handler.
 ```csharp
-public class NamedDictionaryTypeHandler<TValue> : SqlMapper.TypeHandler<Dictionary<string, TValue>>
+using System.Text.Json;
+public class NamedDictionaryTypeHandler<TValue> : 
+             SqlMapper.TypeHandler<Dictionary<string, TValue>>
 {
-    public override void SetValue(IDbDataParameter parameter, Dictionary<string, TValue> value)
+    public override void SetValue(IDbDataParameter parameter, 
+                                  Dictionary<string, TValue> value)
     {
-        // suppress 'null' text for empty dictionaries
-        parameter.Value = System.Text.Json.JsonSerializer.Serialize<Dictionary<string, TValue>>(value);
+        parameter.Value = JsonSerializer.Serialize<Dictionary<string, TValue>>(value);
     }
 
     public override Dictionary<string, TValue> Parse(object value)
@@ -328,7 +333,7 @@ public class NamedDictionaryTypeHandler<TValue> : SqlMapper.TypeHandler<Dictiona
         {
             return null;
         }
-        return System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, TValue>>(json);
+        return JsonSerializer.Deserialize<Dictionary<string, TValue>>(json);
     }
 }
 ```
