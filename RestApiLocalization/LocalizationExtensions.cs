@@ -230,6 +230,7 @@ public static class LocalizationExtensions
 
         // culture
         culture ??= Thread.CurrentThread.CurrentUICulture.Name;
+        culture = culture.Trim();
 
         // specific language localization (e.g. en-US)
         var cultureName = localizations.Keys.FirstOrDefault(
@@ -244,12 +245,26 @@ public static class LocalizationExtensions
             return (TValue)localizationValue;
         }
 
-        // neutral language localization (e.g. en, de)
+        // neutral language
         var index = culture.IndexOf('-');
-        if (index <= 0)
+        if (index <= 0 && culture.Length == 2)
         {
-            return baseValue;
+            // search for first country specific language
+            var specificCulture = localizations.Keys.FirstOrDefault(
+                x => x.StartsWith(culture, StringComparison.OrdinalIgnoreCase));
+            if (specificCulture == null)
+            {
+                return baseValue;
+            }
+            var localizationValue = localizations[specificCulture];
+            if (localizationValue == null)
+            {
+                return baseValue;
+            }
+            return (TValue)localizationValue;
         }
+
+        // neutral language localization (e.g. en, de)
         var neutralCulture = culture.Substring(0, index);
         cultureName = localizations.Keys.FirstOrDefault(
             x => string.Equals(x, neutralCulture, StringComparison.OrdinalIgnoreCase));
