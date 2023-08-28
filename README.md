@@ -1,4 +1,3 @@
-# Data-driven localization for .NET REST APIs
 Because of the high level of automation in the cloud, software models and data are becoming increasingly dynamic. Let's take the example of an online fruit shop that sells its products in several countries. New products are entered by users in different languages.
 
 When designing REST APIs with localized model data, the following considerations must be taken into account 
