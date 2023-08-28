@@ -1,0 +1,113 @@
+﻿@using System.Globalization
+@using RestApiLocalization.WebApp.Service
+@inherits LayoutComponentBase
+
+<PageTitle>.NET Object Localization</PageTitle>
+
+<MudThemeProvider @ref="@mudThemeProvider" @bind-IsDarkMode="@IsDarkMode" />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Title="Toggle Sidebar"
+                       Color="Color.Inherit"
+                       Edge="Edge.Start"
+                       OnClick="@NavBarToggle" />
+        <MudText Typo="Typo.h6">
+            REST API Localization for .NET
+        </MudText>
+        <MudSpacer />
+        <MudStack Spacing="0" Row="true" Style="min-width: 25rem;">
+            <MudSelect @bind-Value="CurrentCulture" T="string"
+                       Label="Culture"
+                       AnchorOrigin="Origin.BottomCenter">
+                @foreach (var culture in Cultures)
+                {
+                    <MudSelectItem Value="@culture.Name">@culture.DisplayName</MudSelectItem>
+
+                }
+            </MudSelect>
+            <MudToggleIconButton @bind-Toggled="@IsDarkMode"
+                                 Class="flex-grow-0"
+                                 Icon="@Icons.Material.Filled.DarkMode" Color="@Color.Inherit" Title="To dark mode"
+                                 ToggledIcon="@Icons.Material.Filled.LightMode" ToggledTitle="To light mode" />
+        </MudStack>
+    </MudAppBar>
+    <MudDrawer @bind-Open="NavBarOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    [Inject] private NavigationManager? NavigationManager { get; set; }
+
+    [Inject]
+    private CultureService? CultureService { get; set; }
+
+    private MudThemeProvider? mudThemeProvider;
+    private bool IsDarkMode { get; set; } = true;
+    private bool NavBarOpen { get; set; } = true;
+
+    private List<CultureDescription> Cultures { get; set; } = new();
+
+    private string currentCulture = string.Empty;
+    private string CurrentCulture
+    {
+        get => currentCulture;
+        set
+        {
+            if (string.Equals(currentCulture, value))
+            {
+                return;
+            }
+            currentCulture = value;
+            ApplyCulture(value);
+        }
+    }
+
+
+    private void NavBarToggle()
+    {
+        NavBarOpen = !NavBarOpen;
+    }
+
+    private void ApplyCulture(string cultureName)
+    {
+        // apply culture to the current thread
+        var culture = CultureInfo.GetCultureInfo(cultureName);
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        if (NavigationManager != null)
+        {
+            NavigationManager.NavigateTo(NavigationManager.Uri, true);
+        }
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        currentCulture = Thread.CurrentThread.CurrentUICulture.Name;
+        return base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (mudThemeProvider != null)
+            {
+                IsDarkMode = await mudThemeProvider.GetSystemPreference();
+                StateHasChanged();
+            }
+
+            if (CultureService != null)
+            {
+                Cultures = await CultureService.GetAvailableCultureDescriptionsAsync();
+            }
+        }
+    }
+}

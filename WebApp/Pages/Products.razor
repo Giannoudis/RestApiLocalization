@@ -1,0 +1,80 @@
+﻿@page "/products"
+@using RestApiLocalization.WebApp.Model
+
+<PageTitle>Products</PageTitle>
+
+@* --- product --- *@
+<MudText Typo="Typo.h5" Class="my-4">Products</MudText>
+
+@if (products != null && products.Count > 0)
+{
+    <MudDataGrid T="Product"
+                 Items="products"
+                 Hideable="false"
+                 ShowColumnOptions="false"
+                 Filterable="true"
+                 FilterMode="DataGridFilterMode.ColumnFilterMenu"
+                 ColumnResizeMode="ResizeMode.Column"
+                 SortMode="SortMode.Single">
+        <Columns>
+            <PropertyColumn Property="x => x.Name" Title="Name" />
+            <PropertyColumn Property="x => x.NameLocalizations" Title="Name Localizations">
+                <CellTemplate>
+                    @GetLocalizations(context.Item, nameof(Product.Name))
+                </CellTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.Price" Title="Price" Format="F2" />
+            <PropertyColumn Property="x => x.PriceLocalizations" Title="Price Localizations">
+                <CellTemplate>
+                    @GetLocalizations(context.Item, nameof(Product.Price))
+                </CellTemplate>
+            </PropertyColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="Product" />
+        </PagerContent>
+    </MudDataGrid>
+}
+else
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4" Style="Width: fit-content;">
+        No products available.
+    </MudPaper>
+}
+
+@* --- product dto --- *@
+<MudText Typo="Typo.h5" Class="my-4">DTO Products</MudText>
+
+@if (dataProducts != null && dataProducts.Count > 0)
+{
+    <MudDataGrid T="ProductDto"
+                 Items="dataProducts"
+                 Hideable="false"
+                 ShowColumnOptions="false"
+                 Filterable="true"
+                 FilterMode="DataGridFilterMode.ColumnFilterMenu"
+                 ColumnResizeMode="ResizeMode.Column"
+                 SortMode="SortMode.Single">
+        <Columns>
+            <PropertyColumn Property="x => x.Name" Title="Name" />
+            <PropertyColumn Property="x => x.Price" Title="Price" Format="F2" />
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="ProductDto" />
+        </PagerContent>
+    </MudDataGrid>
+}
+else
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4" Style="Width: fit-content;">
+        No products available.
+    </MudPaper>
+}
+
+@* --- messages --- *@
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4 mud-error" Style="Width: fit-content;">
+        @ErrorMessage
+    </MudPaper>
+}

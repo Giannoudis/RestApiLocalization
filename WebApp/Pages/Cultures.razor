@@ -1,0 +1,43 @@
+﻿@page "/"
+@page "/cultures"
+
+<PageTitle>Cultures</PageTitle>
+
+@* --- case values --- *@
+<MudText Typo="Typo.h5" Class="my-4">Cultures</MudText>
+
+@* --- full product data grid --- *@
+@if (cultures != null && cultures.Count > 0)
+{
+    <MudDataGrid T="CultureDescription"
+                 Items="cultures"
+                 Hideable="false"
+                 ShowColumnOptions="false"
+                 Filterable="true"
+                 FilterMode="DataGridFilterMode.ColumnFilterRow"
+                 ColumnResizeMode="ResizeMode.Column"
+                 SortMode="SortMode.Single">
+        <Columns>
+            <PropertyColumn Property="x => x.Name" Title="Name" />
+            <PropertyColumn Property="x => x.DisplayName" Title="Display Name" />
+            <PropertyColumn Property="x => x.NativeName" Title="Native Name" />
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="CultureDescription" />
+        </PagerContent>
+    </MudDataGrid>
+}
+else
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4" Style="Width: fit-content;">
+        No products available.
+    </MudPaper>
+}
+
+@* --- messages --- *@
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4 mud-error" Style="Width: fit-content;">
+        @ErrorMessage
+    </MudPaper>
+}

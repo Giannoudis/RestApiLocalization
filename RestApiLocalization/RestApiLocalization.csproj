@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>RestApiLocalization</RootNamespace>
+		<Title>REST API Localization for .NET</Title>
+		<Version>1.0.0</Version>
+		<Authors>Jani Giannoudis</Authors>
+		<Copyright>(c) 2011-2023 by Jani Giannoudis, Switzerland</Copyright>
+		<Description>REST API Localization for .NET</Description>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/Giannoudis/RestApiLocalization</RepositoryUrl>
+		<RepositoryType>GitHub</RepositoryType>
+		<PackageId>RestApiLocalization.NET</PackageId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+</Project>
