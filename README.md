@@ -24,7 +24,7 @@ REST API product localization:
 #### NuGet Package
 To use the localization features described here, the NuGet package [RestApiLocalization.NET](https://www.nuget.org/packages/RestApiLocalization.NET/) must be installed. The package includes the management of supported system cultures (`Culture Provider`) as well as the extension methods for localizing data.
 
-## Culture - the Foundation of localization
+## Culture - The Localization Foundation
 NET cultures have a unique name according to the rules of [RFC4646/ISO639/ISO3166](https://learn.microsoft.com/en-us/dotnet/api/system.globalization.cultureinfo#culture-names-and-identifiers), which defines three levels for determining the culture:
 <p align="center">
     <img src="docs/CultureStack.png" alt=".NET Culture Stack" width="600" />
