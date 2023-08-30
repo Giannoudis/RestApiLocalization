@@ -88,14 +88,17 @@ namespace RestApiLocalization
             // default culture
             defaultCultureName ??= context == CultureContext.Application
                 ? CultureInfo.CurrentCulture.Name
-                : CultureInfo.DefaultThreadCurrentCulture?.Name ?? CultureInfo.InvariantCulture.Name;
-            var defaultCulture = CultureItems.FirstOrDefault(
-                x => string.Equals(x.Name, defaultCultureName, StringComparison.OrdinalIgnoreCase))?.Culture;
-            if (defaultCulture == null)
+                : CultureInfo.DefaultThreadCurrentCulture?.Name;
+            if (defaultCultureName != null)
             {
-                throw new LocalizationException($"Unknown default culture {defaultCultureName}");
+                var defaultCulture = CultureItems.FirstOrDefault(
+                    x => string.Equals(x.Name, defaultCultureName, StringComparison.OrdinalIgnoreCase))?.Culture;
+                if (defaultCulture == null)
+                {
+                    throw new LocalizationException($"Unknown default culture {defaultCultureName}");
+                }
+                DefaultCultureName = defaultCultureName;
             }
-            DefaultCultureName = defaultCultureName;
 
             // culture context
             Context = context;
@@ -141,12 +144,15 @@ namespace RestApiLocalization
             // default culture
             defaultCultureName ??= context == CultureContext.Application
                 ? CultureInfo.CurrentCulture.Name
-                : CultureInfo.DefaultThreadCurrentCulture?.Name ?? CultureInfo.InvariantCulture.Name;
-            var defaultCulture = CultureItems.FirstOrDefault(
-                x => string.Equals(x.Name, defaultCultureName, StringComparison.OrdinalIgnoreCase))?.Culture;
-            if (defaultCulture == null)
+                : CultureInfo.DefaultThreadCurrentCulture?.Name;
+            if (!string.IsNullOrWhiteSpace(defaultCultureName))
             {
-                throw new LocalizationException($"Unknown default culture {defaultCultureName}");
+                var defaultCulture = CultureItems.FirstOrDefault(
+                    x => string.Equals(x.Name, defaultCultureName, StringComparison.OrdinalIgnoreCase))?.Culture;
+                if (defaultCulture == null)
+                {
+                    throw new LocalizationException($"Unknown default culture {defaultCultureName}");
+                }
             }
             DefaultCultureName = defaultCultureName;
 
@@ -157,7 +163,7 @@ namespace RestApiLocalization
         #endregion
 
         /// <inheritdoc />
-        public virtual string DefaultCultureName { get; }
+        public string? DefaultCultureName { get; set; }
 
         /// <inheritdoc />
         public virtual CultureInfo CurrentCulture =>

@@ -5,7 +5,7 @@ namespace RestApiLocalization;
 public interface ICultureProvider
 {
     /// <summary>Get the default culture name</summary>
-    string DefaultCultureName { get; }
+    string? DefaultCultureName { get; }
 
     /// <summary>Get the current culture</summary>
     CultureInfo CurrentCulture { get; }

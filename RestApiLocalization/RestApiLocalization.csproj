@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 		<RootNamespace>RestApiLocalization</RootNamespace>
 		<Title>REST API Localization for .NET</Title>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 		<Authors>Jani Giannoudis</Authors>
 		<Copyright>(c) 2011-2023 by Jani Giannoudis, Switzerland</Copyright>
 		<Description>REST API Localization for .NET</Description>

@@ -71,8 +71,11 @@ public class Program
         // request localization
         services.Configure<RequestLocalizationOptions>(options =>
         {
-            options.DefaultRequestCulture =
-                new Microsoft.AspNetCore.Localization.RequestCulture(cultureProvider.DefaultCultureName);
+            if (!string.IsNullOrWhiteSpace(cultureProvider.DefaultCultureName))
+            {
+                options.DefaultRequestCulture =
+                    new Microsoft.AspNetCore.Localization.RequestCulture(cultureProvider.DefaultCultureName);
+            }
             options.SupportedCultures = cultureProvider.GetSupportedCultures();
         });
     }
