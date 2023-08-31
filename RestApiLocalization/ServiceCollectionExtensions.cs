@@ -17,10 +17,14 @@ public static class ServiceCollectionExtensions
         IEnumerable<string>? supportedCultures = null)
     {
         // culture provider
-        var cultureProvider = new CultureProvider(
-            supportedCultures: supportedCultures ?? new List<string>(),
-            defaultCultureName: defaultCulture,
-            cultureScope: cultureScope ?? new());
+        var cultureProvider = supportedCultures != null ?
+            new CultureProvider(
+                supportedCultures: supportedCultures,
+                defaultCultureName: defaultCulture,
+                cultureScope: cultureScope ?? new()) :
+            new CultureProvider(
+                defaultCultureName: defaultCulture,
+                cultureScope: cultureScope ?? new());
         serviceCollection.AddSingleton<ICultureProvider>(cultureProvider);
         return serviceCollection;
     }
@@ -36,10 +40,14 @@ public static class ServiceCollectionExtensions
         IEnumerable<string>? supportedCultures = null)
     {
         // culture provider
-        var cultureProvider = new CultureProvider(
-            supportedCultures: supportedCultures ?? new List<string>(),
-            defaultCultureName: defaultCulture,
-            cultureScope: cultureScope ?? new());
+        var cultureProvider = supportedCultures != null ?
+            new CultureProvider(
+                supportedCultures: supportedCultures,
+                defaultCultureName: defaultCulture,
+                cultureScope: cultureScope ?? new()) :
+            new CultureProvider(
+                defaultCultureName: defaultCulture,
+                cultureScope: cultureScope ?? new());
         serviceCollection.AddSingleton<ICultureProvider>(cultureProvider);
 
         // request localization

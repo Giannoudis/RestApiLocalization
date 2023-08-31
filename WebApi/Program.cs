@@ -28,18 +28,18 @@ public class Program
         // localization
         // use AddLocalizationWithRequest() to register the request localization
         builder.Services.AddLocalization(
-            cultureScope: new(
-                neutral: true,
-                specific: true,
-                installed: true,
-                custom: false,
-                replacement: false),
-            supportedCultures: new[]
-                {
-                    "en", "en-US", "en-GB",
-                    "de", "de-DE", "de-AT", "de-CH",
-                    "zh",
-                },
+            //cultureScope: new(
+            //    neutral: true,
+            //    specific: true,
+            //    installed: true,
+            //    custom: false,
+            //    replacement: false),
+            //supportedCultures: new[]
+            //    {
+            //        "en", "en-US", "en-GB",
+            //        "de", "de-DE", "de-AT", "de-CH",
+            //        "zh",
+            //    },
             defaultCulture: "en-US");
 
         var app = builder.Build();
