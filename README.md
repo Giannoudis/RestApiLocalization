@@ -67,7 +67,7 @@ public interface ICultureProvider
 }
 ```
 
-In the REST application, the `ICultureProvider` service is set up at startup.
+In the REST application, the localization service is set up at startup.
 ```csharp
 public static void Main(string[] args)
 {
