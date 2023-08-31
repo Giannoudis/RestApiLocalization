@@ -26,7 +26,21 @@ public class Program
         });
 
         // localization
-        SetupLocalization(builder.Services);
+        // use AddLocalizationWithRequest() to register the request localization
+        builder.Services.AddLocalization(
+            cultureScope: new CultureScope(
+                neutral: true,
+                specific: true,
+                installed: true,
+                custom: false,
+                replacement: false),
+            supportedCultures: new[]
+                {
+                    "en", "en-US", "en-GB",
+                    "de", "de-DE", "de-AT", "de-CH",
+                    "zh",
+                },
+            defaultCulture: "en-US");
 
         var app = builder.Build();
 
@@ -38,45 +52,9 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
-
         app.MapControllers();
 
         app.Run();
-    }
-
-    private static void SetupLocalization(IServiceCollection services)
-    {
-        // culture
-        var scope = new CultureScope(
-            neutral: true,
-            specific: true,
-            installed: true,
-            custom: false,
-            replacement: false);
-        string[] supportedCultures =
-        {
-            "en", "en-US", "en-GB",
-            "de", "de-DE", "de-AT", "de-CH",
-            "zh",
-        };
-        var cultureProvider = new CultureProvider(
-            supportedCultures: supportedCultures,
-            defaultCultureName: "en-US",
-            cultureScope: scope);
-        services.AddSingleton<ICultureProvider>(cultureProvider);
-
-        // request localization
-        services.Configure<RequestLocalizationOptions>(options =>
-        {
-            if (!string.IsNullOrWhiteSpace(cultureProvider.DefaultCultureName))
-            {
-                options.DefaultRequestCulture =
-                    new Microsoft.AspNetCore.Localization.RequestCulture(cultureProvider.DefaultCultureName);
-            }
-            options.SupportedCultures = cultureProvider.GetSupportedCultures();
-        });
     }
 }
