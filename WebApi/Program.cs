@@ -28,7 +28,7 @@ public class Program
         // localization
         // use AddLocalizationWithRequest() to register the request localization
         builder.Services.AddLocalization(
-            cultureScope: new CultureScope(
+            cultureScope: new(
                 neutral: true,
                 specific: true,
                 installed: true,
