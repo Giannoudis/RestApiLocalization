@@ -1,4 +1,4 @@
-using AutoMapper;
+using RestApiLocalization.WebApi.Mapping;
 using RestApiLocalization.WebApi.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,14 +21,13 @@ public class ProductsController : ControllerBase
     [HttpGet("dto", Name = "GetProductsDto")]
     public IEnumerable<ProductDto> GetProductsDto([FromQuery] string? culture = null)
     {
-        // map products to dto
-        var config = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDto>());
-        var mapper = new Mapper(config);
+        // map products to dto (Mapperly source-generated mapper)
+        var mapper = new ProductMapper();
 
         var products = new ProductService().GetProducts();
         var dataProducts = products.ConvertAll(
             // map object
-            x => mapper.Map<ProductDto>(x)
+            x => mapper.ToDto(x)
                 // map localizations
                 .MapLocalizations(x, culture)).ToList();
         return dataProducts;
