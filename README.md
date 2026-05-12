@@ -208,6 +208,17 @@ public class ProductDto
 }
 ```
 
+The mapping from `Product` to `ProductDto` is generated at compile time by [Mapperly](https://github.com/riok/mapperly). Define a partial mapper class and let the source generator emit the implementation:
+```csharp
+[Mapper]
+public partial class ProductMapper
+{
+    [MapperIgnoreSource(nameof(Product.NameLocalizations))]
+    [MapperIgnoreSource(nameof(Product.PriceLocalizations))]
+    public partial ProductDto ToDto(Product source);
+}
+```
+
 In the product controller, the `GetProducts` endpoint returns the localizable products and the `GetProductsDto` method returns the DTOs for the store.
 ```csharp
 [ApiController]
@@ -226,15 +237,13 @@ public class ProductsController : ControllerBase
     public IEnumerable<ProductDto> GetProductsDto(
         [FromQuery] string? culture = null)
     {
-        // map products to dto objects
-        var config = new MapperConfiguration(
-            cfg => cfg.CreateMap<Product, ProductDto>());
-        var mapper = new Mapper(config);
+        // map products to dto (Mapperly source-generated mapper)
+        var mapper = new ProductMapper();
 
         var products = new ProductService().GetProducts();
         var dataProducts = products.ConvertAll(
             // map object
-            x => mapper.Map<ProductDto>(x)
+            x => mapper.ToDto(x)
                 // map localizations
                 .MapLocalizations(x, culture)).ToList();
         return dataProducts;
@@ -242,7 +251,7 @@ public class ProductsController : ControllerBase
 }
 ```
 
-To convert the product to the DTO, the object is first mapped with [AutoMapper](https://github.com/AutoMapper/AutoMapper) `mapper.Map<ProductDto>` and then `MapLocalizations()` is used to apply the localization to the DTO.
+To convert the product to the DTO, the object is first mapped with the source-generated [Mapperly](https://github.com/riok/mapperly) mapper `mapper.ToDto(x)` and then `MapLocalizations()` is used to apply the localization to the DTO. Mapperly generates the mapping code at build time, so there is no runtime reflection involved.
 
 The REST API of this example can be started with the Visual Studio solution `ObjectLocalization.WebApi.sln`.
 <p align="center">
